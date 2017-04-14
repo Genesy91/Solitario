@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 723847c6ed4ee874a8c1f8b8cd6b5b29
+timeCreated: 1491984374
+licenseType: Free
+TrueTypeFontImporter:
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontName: Baron Neue
+  fontNames:
+  - Baron Neue
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 4152e1176aebfab4793fd1cc7bd3d581, type: 3}
+  - {fileID: 12800000, guid: 1ef5c5ff781f55d4d8995b944910c6ff, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

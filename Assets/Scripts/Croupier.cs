@@ -2,8 +2,13 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//cardsDB è una lista di tutte le carte sempre ordinata e potrebbe non essere necessaria (CONTROLLARE)
+//deckList è la lista usata per mescolarle
+//deck è il mazzo usato in gioco
 public class Croupier : MonoBehaviour
 {
+    public Card[] inspectrCardsInColumn; //DA CANELLARE!!
+
     public List<Card> cardsDB;
 
     //public List<Card> column1;
@@ -25,13 +30,14 @@ public class Croupier : MonoBehaviour
     GameObject[] columns;
 
 
-    public List<Card> heartsDeck;
-    public List<Card> diamondsDeck;
-    public List<Card> clubsDeck;
-    public List<Card> spadesDeck;
+    public GameObject heartsDeck;
+    public GameObject diamondsDeck;
+    public GameObject clubsDeck;
+    public GameObject spadesDeck;
 
-    public List<Card> deck;
-    public List<Card> flippedCards;
+    public List<Card> deckList;
+    public Column deck;
+    public Stack<Card> flippedCards;
 
     public GameObject cardPrefab;
 
@@ -43,7 +49,6 @@ public class Croupier : MonoBehaviour
     {
         CreateDeck();
         ShuffleDeck();
-        //columns = new List<Card>[7] { column1, column2, column3, column4, column5, column6, column7 };
         columns = new GameObject[7] { column1, column2, column3, column4, column5, column6, column7 };
         DealCards();
     }
@@ -79,30 +84,39 @@ public class Croupier : MonoBehaviour
     //mescola le carte e popola il mazzo vero e proprio
     public void ShuffleDeck()
     {
-        deck.AddRange(cardsDB);
-        int i = deck.Count - 1;
+        deckList.AddRange(cardsDB);
+        int i = deckList.Count - 1;
         while (i > 0)
         {
-            Card tempCard = deck[i];
+            Card tempCard = deckList[i];
             int k = Random.Range(0, i);
-            deck[i] = deck[k];
-            deck[k] = tempCard;
+            deckList[i] = deckList[k];
+            deckList[k] = tempCard;
             i--;
         }
+        deck.cardsInColumn = new Stack<Card>(deckList);
     }
 
     //assegna le carte alle varie liste
+    //NON uso la classe Move perchè non sono mosse ripercorribili ma la preparazione del gioco
     public void DealCards()
     {
         for (int i = 0; i < 7; i++)
         {
             for (int j = 0; j < i+1; j++)
             {
-                columns[i].GetComponent<Column>().AddCard(deck[0]);
-                deck.RemoveAt(0);
+                columns[i].GetComponent<Column>().AddCard(deck.cardsInColumn.Pop());
             }
-            columns[i].GetComponent<Column>().InspectorVisualizer(); //eliminare!!!
+            columns[i].GetComponent<Column>().InspectorVisualizer(); //ELIMINARE!!!
             columns[i].GetComponent<Column>().FlipTopCard();
         }
+        deck.InspectorVisualizer(); //ELIMINARE!!
+    }
+
+
+    //DA CANCELLARE!!!!
+    public void InspectorVisualizer()
+    {
+        inspectrCardsInColumn = deck.cardsInColumn.ToArray();
     }
 }

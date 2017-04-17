@@ -7,7 +7,8 @@ public class Column : MonoBehaviour {
     //forse è meglio avere una variabile che punta sempre alla TopCard
 
     public Stack<Card> cardsInColumn;     //la testa della lista è quella più in fondo
-    public Card[] inspectrCardsInColumn; //da cancellare! serve per vederla nell'inspector
+
+    public Card[] inspectrCardsInColumn; //da CANCELLARE! serve per vederla nell'inspector
 
     Vector2 bottomCardPosition;
     public float bottomCardYOffset;
@@ -66,12 +67,6 @@ public class Column : MonoBehaviour {
         return cardsInColumn.Peek();
     }
 
-    //da cancellare
-    public void InspectorVisualizer()
-    {
-        inspectrCardsInColumn = cardsInColumn.ToArray();
-    }
-
     //gira la carta più in alto se non è girata
     public void FlipTopCard()
     {
@@ -81,4 +76,14 @@ public class Column : MonoBehaviour {
             topCard.FlipCard();
         }
     }
+
+
+
+
+    //DA CANCELLARE!!!!
+    public void InspectorVisualizer()
+    {
+        inspectrCardsInColumn = cardsInColumn.ToArray();
+    }
+
 }

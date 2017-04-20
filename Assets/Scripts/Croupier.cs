@@ -95,7 +95,6 @@ public class Croupier : MonoBehaviour
             i--;
         }
         deck.cardsInDeck = new Stack<Card>(deckList);
-        InspectorVisualizer(); //ELIMINARE!
     }
 
     //assegna le carte alle varie liste
@@ -111,7 +110,6 @@ public class Croupier : MonoBehaviour
             columns[i].GetComponent<Column>().InspectorVisualizer(); //ELIMINARE!!!
             columns[i].GetComponent<Column>().FlipTopCard();
         }
-        InspectorVisualizer(); //ELIMINARE!!
     }
 
     //istanzia una mossa quando richiesto da una carta (oncarddrop) verificando le regole in base alla column su cui è stata rilasciata
@@ -256,15 +254,13 @@ public class Croupier : MonoBehaviour
 
     public void RebuildDeck()
     {
-        //deck.AddCards(discardDeck.cardsInColumn);
+        while (discardDeck.cardsInDeck.Count > 0)
+        {
+            deck.AddCard(discardDeck.RemoveCard());
+        }
         discardDeck.cardsInDeck.Clear();
-        InspectorVisualizer();
     }
 
-    //DA CANCELLARE!!!!
-    public void InspectorVisualizer()
-    {
-        inspectrCardsInColumn = deck.cardsInDeck.ToArray();
-    }
+
 
 }

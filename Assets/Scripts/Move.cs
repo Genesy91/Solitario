@@ -13,7 +13,6 @@ public class Move : Command
     Card card;
     Column originColumn;
     Column targetColumn;
-    int numberOfCards;
     bool wasFlipped;
     int scoredPoints;
 
@@ -23,7 +22,6 @@ public class Move : Command
         targetColumn = target;
         scoredPoints = points;
         this.card = card;
-        numberOfCards = 0;
     }
 
     //esegue la mossa
@@ -34,7 +32,6 @@ public class Move : Command
         {
             tempStack.Push(originColumn.RemoveCard());
         } while (!tempStack.Peek().Equals(card));
-
         while (tempStack.Count > 0)
         {
             targetColumn.AddCards(tempStack.Pop());
@@ -49,7 +46,10 @@ public class Move : Command
         {
             tempStack.Push(targetColumn.RemoveCard());
         } while (!tempStack.Peek().Equals(card));
-        //originColumn.AddCards(tempStack);
+        while (tempStack.Count > 0)
+        {
+            originColumn.AddCards(tempStack.Pop());
+        }
     }
 
     //serve per permettere al croupier di sottrarre i punti

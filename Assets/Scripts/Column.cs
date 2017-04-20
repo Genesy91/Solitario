@@ -30,6 +30,7 @@ public class Column : MonoBehaviour {
     //aggiunge una carta in cima, sia nella lista logica che spostando il prefab nella column fisica
     public void AddCards(Card newCard)
     {
+        
         if (cardsInColumn.Count == 0)                                                            //nel caso sia la prima della column
         {
             bottomCardPosition = (Vector2)transform.position - new Vector2(0f, bottomCardYOffset);
@@ -40,6 +41,10 @@ public class Column : MonoBehaviour {
         else
         {
             Card topCard = TopCard();
+            if (gameObject.tag == "Column" && topCard.isFlipped && topCard.cardValue != newCard.cardValue + 1)    //serve quando con un Undo una carta torna su una posizione            
+            {                                                                                                         //nella quale precedentemente c'era una carta coperta
+                topCard.FlipCard();
+            }
             if (topCard.isFlipped)                                                                //verifica se la carta su cui viene rilasciata e girata oppure no
             {
                 newCard.ReachPosition(topCard.TargetPosition() - new Vector2(0f, flippedCardYOffset));
@@ -56,57 +61,7 @@ public class Column : MonoBehaviour {
         cardCounter++;
         newCard.SetOrder(cardCounter);                           //order in layer ....BUG?
         
-        //if (gameObject.tag == "Deck" || gameObject.tag == "Discard")  //nel caso si stiano pescando carte dal mazzo o stiano ritornando ad esso (annullamento di una mossa)
-        //{
-        //    newCard.FlipCard();
-        //}
-        InspectorVisualizer(); //ELIMINARE!!
     }
-
-    ////aggiunge un insieme di carte in cima, sia nella lista logica che spostando i prefab nella column fisica
-    //public void AddCards(Stack<Card> newCards)
-    //{
-    //    bottomCardPosition = (Vector2)transform.position - new Vector2(0f, bottomCardYOffset);
-    //    Card firstCard = newCards.Peek();
-    //    if (cardsInColumn.Count == 0)
-    //    {
-    //        firstCard.ReachPosition(bottomCardPosition);
-    //        firstCard.isBottomCard = true;
-    //        firstCard.cardPrefab.transform.SetParent(null);
-    //        print("count0");
-    //    }
-    //    else
-    //    {
-    //        Card topCard = TopCard(); //si posiziona a distanze diverse a seconda dell'orientamento della carta in cima
-    //        if (topCard.isFlipped)
-    //        {
-    //            firstCard.ReachPosition(topCard.TargetPosition() - new Vector2(0f, flippedCardYOffset));
-    //            //firstCard.cardPrefab.transform.SetParent(topCard.cardPrefab.transform, true); //serve per farle muovere insieme
-    //        }
-    //        else
-    //        {
-    //            firstCard.ReachPosition(topCard.TargetPosition() - new Vector2(0f, unflippedCardYOffset));
-    //        }
-    //        firstCard.cardPrefab.transform.SetParent(TopCard().cardPrefab.transform, true);
-    //    }
-    //    while (newCards.Count != 0)
-    //    {
-    //        cardsInColumn.Push(newCards.Pop()); //aggiunge allo stack
-    //        TopCard().SetOrigin(this);
-    //        TopCard().SetOrder(cardsInColumn.Count);
-
-    //        if (gameObject.tag == "Discard" && !TopCard().isFlipped) //nel caso si stiano pescando carte dal mazzo o stiano ritornando ad esso (annullamento di una mossa)
-    //        {
-    //            TopCard().FlipCard();
-    //        }
-    //        if (gameObject.tag == "Deck") //nel caso si stiano pescando carte dal mazzo o stiano ritornando ad esso (annullamento di una mossa)
-    //        {
-    //            TopCard().FlipCard();
-    //        }
-    //    }
-    //    InspectorVisualizer(); //ELIMINARE!!
-    //}
-
 
 
     //rimuove la carta in cima e la ritorna

@@ -9,7 +9,6 @@ public class CardPrefab : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
     public float speed;
     public bool isMovingToPosition = false;
     public Vector2 targetPosition; //serve per muoversi ma memorizza anche la posizione
-    bool canCheckColumn = false; //permette di verificare in che column si trova la carta
     public bool canBeDrag = false;
 
     //servono per notificare la classe carta quando il prefab viene rilasciato su una column
@@ -41,7 +40,7 @@ public class CardPrefab : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDr
         transform.position = Vector2.MoveTowards(transform.position, targetPosition, delta);
         if ((Vector2)transform.position == targetPosition)
         {
-            isMovingToPosition = false;
+            isMovingToPosition = false; 
         }
     }
 

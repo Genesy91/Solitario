@@ -84,8 +84,13 @@
     <Compile Include="Assets\Scripts\Card.cs" />
     <Compile Include="Assets\Scripts\CardPrefab.cs" />
     <Compile Include="Assets\Scripts\Column.cs" />
+    <Compile Include="Assets\Scripts\Command.cs" />
     <Compile Include="Assets\Scripts\Croupier.cs" />
+    <Compile Include="Assets\Scripts\Deck.cs" />
+    <Compile Include="Assets\Scripts\DiscardDeck.cs" />
+    <Compile Include="Assets\Scripts\DrawCard.cs" />
     <Compile Include="Assets\Scripts\Move.cs" />
+    <Compile Include="Assets\Scripts\TakeCard.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="GenerateTargetFrameworkMonikerAttribute" />

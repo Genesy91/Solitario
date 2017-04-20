@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//Classe Card con le principali caratteristiche di una carta. Contiene il prefab e i metodi per gestirla
 [System.Serializable]
-public class Card {
+public class Card
+{
 
     public value cardValue;
     public seed cardSeed;
@@ -14,8 +17,13 @@ public class Card {
     public Sprite cardPip;
     public bool isFlipped = false;
     public bool isBottomCard = false;
+    GameObject origin;
 
-	public enum value {
+    public delegate void RequestMove(Card card, GameObject origin, GameObject target);
+    public event RequestMove requestMove;
+
+    public enum value
+    {
         ace,
         two,
         three,
@@ -31,7 +39,8 @@ public class Card {
         king
     }
 
-    public enum seed {
+    public enum seed
+    {
         hearts,
         diamonds,
         clubs,
@@ -45,7 +54,7 @@ public class Card {
     }
 
     //quando una carta viene istanziata, le viene assegnato un prefab neutro e lo personalizza in base ai parametri ricevuti
-    public Card (GameObject prefab, value value, seed seed, colour colour, Sprite number, Sprite suit, Sprite pip)
+    public Card(GameObject prefab, value value, seed seed, colour colour, Sprite number, Sprite suit, Sprite pip)
     {
         cardPrefab = prefab;
         cardValue = value;
@@ -57,6 +66,7 @@ public class Card {
         cardPrefab.transform.Find("Number").GetComponent<SpriteRenderer>().sprite = number;
         cardPrefab.transform.Find("Suit").GetComponent<SpriteRenderer>().sprite = suit;
         cardPrefab.transform.Find("Pip").GetComponent<SpriteRenderer>().sprite = pip;
+        cardPrefab.GetComponent<CardPrefab>().onDrop += OnCardDrop; //iscrizione all'altra classe
     }
 
     //dice al prefab di raggiungere la posizione target
@@ -65,25 +75,60 @@ public class Card {
         cardPrefab.GetComponent<CardPrefab>().ReachPosition(target);
     }
 
-    //ritorna la posizione che il prefab deve avere, non quella attuale!!
-    public Vector2 Position()
+    public void GoBack()
     {
-        return cardPrefab.GetComponent<CardPrefab>().target;
+        CardPrefab prefab = cardPrefab.GetComponent<CardPrefab>();
+        cardPrefab.transform.position = prefab.targetPosition;
+        SetOrder(prefab.orderInLayer);
+    }
+
+    //ritorna la posizione che il prefab deve avere, non quella attuale!!
+    public Vector2 TargetPosition()
+    {
+        return cardPrefab.GetComponent<CardPrefab>().targetPosition;
     }
 
     //setta l'order in layer
     public void SetOrder(int position)
     {
-        cardPrefab.GetComponent<SpriteRenderer>().sortingOrder = position;
+        cardPrefab.GetComponent<CardPrefab>().SetOrderInLayer(position);
     }
 
     //gira la carta
     public void FlipCard()
     {
         cardPrefab.GetComponent<Animator>().SetTrigger("flipCard");
+        if (isFlipped)
+        {
+            isFlipped = false;
+            cardPrefab.GetComponent<CardPrefab>().canBeDrag = false;
+        }
+        else
+        {
+            isFlipped = true;
+            cardPrefab.GetComponent<CardPrefab>().canBeDrag = true;
+        }
     }
 
+    //setta la column da cui parte
+    public void SetOrigin(GameObject originColumn)
+    {
+        origin = originColumn;
+    }
 
-
-
+    //notifica il croupier della mossa eseguita o annulla tutto in caso di di mossa a vuoto (carta rilasciata su nessuna column)
+    public void OnCardDrop(GameObject targetColumn)
+    {
+        if (requestMove != null)
+        {
+            if (targetColumn == null)
+            {
+                GoBack();
+            }
+            else
+            {
+                requestMove(this, origin, targetColumn);   //richiama il listener nel croupier passandogli se stesso, 
+            }                                                                     //la column di partenza e quella di arrivo
+        }
+    }
 }
